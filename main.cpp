@@ -43,26 +43,5 @@ void split(lista *v, int di){
     insertionSort(aux, 5);
     lista *p, *r;
     p = (lista *) malloc(sizeof(lista));
-    r= (lista *) malloc(sizeof(lista));
-    p->dado[2]=aux[2];
-    if(p->f[0]==NULL) {
-        p->f[0] = v;
-        p->f[1] = r;
-    }
-    else if((p->f[0]!=NULL)&&(p->f[1]==NULL)){
-        p->f[1] = v;
-        p->f[2] = r;
-    }
-    else if((p->f[0]!=NULL)&&(p->f[1]!=NULL)&&(p->f[2]!=NULL)){
-        p->f[2] = v;
-        p->f[3] = r;
-    }
-    else if((p->f[0]!=NULL)&&(p->f[1]!=NULL)&&(p->f[2]!=NULL)&&(p->f[3]=NULL)){
-        p->f[3] = v;
-        p->f[4] = r;
-    }
-    else{
-        p->f[4] = v;
-        p->f[5] = r;
-    }
+   
 }
