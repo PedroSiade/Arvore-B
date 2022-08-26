@@ -5,15 +5,16 @@ using namespace std;
 
 typedef struct lista{
     boolean folha;
-    int chaves[4];
-    struct lista *links[5];
+    int chaves[3];
+    struct lista *links[4];
     lista(){
         for(int i=0;i<4;i++)
             folha=false;
     }
 }lista;
 
-void split(lista *no, int ddado, int ordem);
+void split(lista *no, int dado, int ordem);
+lista *busca(lista *raiz, int dado);
 void insertionSort(int v[], int length);
 
 int main() {
@@ -65,5 +66,26 @@ void split(lista *no, int dado, int ordem){
         quickSort(atual->chaves);
         //linkar o pai com os dois nós (atual e nova)
         inserir(atual->chaves[medio + 1]);
+    }
+}
+
+lista *busca(lista *raiz, int dado){
+    if (dado == raiz->chaves[0] || dado == raiz->chaves[1] || dado == raiz->chaves[2] || dado == raiz->chaves[3]){
+        return raiz;
+    }
+    else if (dado < raiz->chaves[0]){
+        busca(raiz->links[0], dado);
+    }
+    else if (dado > raiz->chaves[0] && dado < raiz->chaves[1]){
+        busca(raiz->links[1], dado);
+    }
+    else if (dado > raiz->chaves[1] && dado < raiz->chaves[2]){
+        busca(raiz->links[2], dado);
+    }
+    else if (dado > raiz->chaves[2] && dado < raiz->chaves[3]){
+        busca(raiz->links[3], dado);
+    }
+    else if (dado > raiz->chaves[3]){
+        busca(raiz->links[4], dado);
     }
 }
