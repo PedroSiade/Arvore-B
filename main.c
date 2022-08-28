@@ -1,16 +1,17 @@
-#include<bits/stdc++.h>
+//#include<bits/stdc++.h>
 #include <rpcndr.h>
+#include "QuickSort.h"
 
-using namespace std;
+//using namespace std;
 
 typedef struct lista{
     boolean folha;
     int chaves[3];
     struct lista *links[4];
-    lista(){
+    /*lista(){
         for(int i=0;i<4;i++)
             folha=false;
-    }
+    }*/
 }lista;
 
 void split(lista *no, int dado, int ordem);
