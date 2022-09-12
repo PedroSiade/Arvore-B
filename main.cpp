@@ -25,6 +25,12 @@ void insercao(lista **raiz, int di);
 lista *busca(lista *raiz, int db);
 lista *buscaPai(lista *raiz, lista *no, int di, int *filho);
 lista *buscaInsercao(lista *raiz, int db);
+void remocaoFolha(lista *raiz, int dado);
+void remocaoIndice(int dado);
+void emprestimoEsq(lista *irmao, lista *pai, lista *alvo, int dado);
+void emprestimoDir(lista *irmao, lista *pai, lista *alvo, int dado);
+void combinacao(lista *filhos);
+
 
 int main() {
     lista  *raiz=NULL;
@@ -39,6 +45,86 @@ int main() {
 
 
     return 0;
+}
+
+void remocaoFolha(lista *raiz, int dado){
+    lista *noAlvo = NULL, *noPai = NULL, *aux = NULL;
+    int encontrado = 0, i = 0;
+    noAlvo = busca(raiz, dado);
+    noPai = raiz;
+    while(encontrado != 1){
+        aux = NULL;
+        i = 0;
+        while(aux != noAlvo && i <= 4){
+            aux = noPai->filho[i];
+            i++;
+        }
+        if(aux == noAlvo){
+            encontrado = 1;
+        }else{
+            if(dado < noPai->dado[0]){
+                noPai = noPai->filho[0];
+            }else if(dado > noPai->dado[0] && dado < noPai->dado[1]){
+                noPai = noPai->filho[1];
+            }else if(dado > noPai->dado[1] && dado < noPai->dado[2]){
+                noPai = noPai->filho[2];
+            }else if(dado > noPai->dado[2] && dado < noPai->dado[3]){
+                noPai = noPai->filho[3];
+            }else if (dado > noPai->dado[3]){
+                noPai = noPai->filho[4];
+            }
+        }
+    }
+
+    int j = 0;
+    while (noAlvo->dado[j] != dado)
+    {
+        j++;
+    }
+    if(noAlvo->countD > 2){
+        noAlvo->dado[j] = -1;
+        insertionSort(noAlvo->dado, 4);
+    }else if(noAlvo->countD == 2){
+        if(noPai->filho[i-1]->countD > 2 && noPai->filho[i+1]->countD == 2){
+            emprestimoEsq(noPai->filho[i-1], noPai, noAlvo, dado);
+            noAlvo->dado[j] = -1;
+            insertionSort(noAlvo->dado, 4);
+        }else if (noPai->filho[i - 1]->countD == 2 && noPai->filho[i + 1]->countD > 2){
+            emprestimoDir(noPai->filho[i+1], noPai, noAlvo, dado);
+            noAlvo->dado[j] = -1;
+            insertionSort(noAlvo->dado, 4);
+        }else if (noPai->filho[i - 1]->countD > 2 && noPai->filho[i + 1]->countD > 2){
+            emprestimoEsq(noPai->filho[i - 1], noPai, noAlvo, dado);
+            noAlvo->dado[j] = -1;
+            insertionSort(noAlvo->dado, 4);
+        }
+    }
+}
+
+void emprestimoEsq(lista *irmao, lista *pai, lista *alvo, int dado){
+    int i = 0, j = 0;
+    while(pai->dado[i] < dado){
+        i++;
+    }
+    alvo->dado[3] = pai->dado[i-1];
+    while(pai->filho[i-1]->dado[j] != -1){
+        j++;
+    }
+    pai->dado[i - 1] = pai->filho[i - 1]->dado[j - 1];
+    pai->filho[i - 1]->dado[j - 1] = -1;
+}
+
+void emprestimoDir(lista *irmao, lista *pai, lista *alvo, int dado)
+{
+    int i = 0;
+    while (pai->dado[i] < dado)
+    {
+        i++;
+    }
+    alvo->dado[3] = pai->dado[i + 1];
+    pai->dado[i + 1] = pai->filho[i + 1]->dado[0];
+    pai->filho[i + 1]->dado[0] = -1;
+    insertionSort(pai->filho[i + 1]->dado, 4);
 }
 
 void insertionSort(int v[], int length){
