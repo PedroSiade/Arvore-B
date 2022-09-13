@@ -29,8 +29,7 @@ void remocaoFolha(lista *raiz, int dado);
 void remocaoIndice(int dado);
 void emprestimoEsq(lista *irmao, lista *pai, lista *alvo, int dado);
 void emprestimoDir(lista *irmao, lista *pai, lista *alvo, int dado);
-void combinacao(lista *filhos);
-
+void combinacao(lista *irmao, lista *pai, lista *alvo, int dado);
 
 int main() {
     lista  *raiz=NULL;
@@ -90,18 +89,40 @@ void remocaoFolha(lista *raiz, int dado){
             noAlvo->dado[j] = -1;
             insertionSort(noAlvo->dado, 4);
         }else if (noPai->filho[i - 1]->countD == 2 && noPai->filho[i + 1]->countD > 2){
-            emprestimoDir(noPai->filho[i+1], noPai, noAlvo, dado);
             noAlvo->dado[j] = -1;
+            emprestimoDir(noPai->filho[i+1], noPai, noAlvo, dado);
             insertionSort(noAlvo->dado, 4);
         }else if (noPai->filho[i - 1]->countD > 2 && noPai->filho[i + 1]->countD > 2){
-            emprestimoEsq(noPai->filho[i - 1], noPai, noAlvo, dado);
             noAlvo->dado[j] = -1;
+            emprestimoEsq(noPai->filho[i - 1], noPai, noAlvo, dado);
             insertionSort(noAlvo->dado, 4);
+        }else if (noPai->filho[i - 1]->countD == 2 && noPai->filho[i + 1]->countD == 2){
+            noAlvo->dado[j] = -1;
+            combinacao(noPai->filho[i - 1], noPai, noAlvo, dado);
         }
     }
 }
 
-void emprestimoEsq(lista *irmao, lista *pai, lista *alvo, int dado){
+void combinacao(lista *irmao, lista *pai, lista *alvo, int dado){
+    int i = 0, j = 0;
+    while (pai->dado[i] < dado){
+        i++;
+    }
+    alvo->dado[3] = pai->dado[i - 1];
+    pai->dado[i - 1] = -1;
+    insertionSort(alvo->dado, 4);
+    pai->filho[i-1]->dado[2] = alvo->dado[2];
+    pai->filho[i-1]->dado[3] = alvo->dado[3];
+    do{
+        pai->filho[i] = NULL;
+        pai->filho[i] = pai->filho[i+1];
+        i++;
+    }while(i != 4);
+    insertionSort(pai->dado, 4);
+}
+
+void emprestimoEsq(lista *irmao, lista *pai, lista *alvo, int dado)
+{
     int i = 0, j = 0;
     while(pai->dado[i] < dado){
         i++;
