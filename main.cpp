@@ -50,8 +50,9 @@ int main() {
 void remocaoFolha(lista *raiz, int dado){
     lista *noAlvo = NULL, *noPai = NULL, *aux = NULL;
     int encontrado = 0, i = 0;
-    noAlvo = busca(raiz, dado);
-    noPai = raiz;
+    noAlvo = busca(raiz, dado, 0);
+    noPai = noAlvo->pai;
+    /*noPai = raiz;
     while(encontrado != 1){
         aux = NULL;
         i = 0;
@@ -74,6 +75,11 @@ void remocaoFolha(lista *raiz, int dado){
                 noPai = noPai->filho[4];
             }
         }
+    }
+    */
+    while (noPai->dado[i] < dado)
+    {
+        i++;
     }
 
     int j = 0;
@@ -134,7 +140,10 @@ void emprestimoEsq(lista *irmao, lista *pai, lista *alvo, int dado)
     }
     pai->dado[i - 1] = pai->filho[i - 1]->dado[j - 1];
     pai->filho[i - 1]->dado[j - 1] = -1;
+    insertionSort(pai->filho[i - 1]->dado, 4);
+    insertionSort(pai->dado, 4);
 }
+
 
 void emprestimoDir(lista *irmao, lista *pai, lista *alvo, int dado)
 {
@@ -147,6 +156,7 @@ void emprestimoDir(lista *irmao, lista *pai, lista *alvo, int dado)
     pai->dado[i + 1] = pai->filho[i + 1]->dado[0];
     pai->filho[i + 1]->dado[0] = -1;
     insertionSort(pai->filho[i + 1]->dado, 4);
+    insertionSort(pai->dado, 4);
 }
 
 void insertionSort(int v[], int length){
