@@ -78,17 +78,21 @@ void remocaoIndice(lista *raiz, int dado){
         alvo->filho[j]->dado[i - 1] = -1;
         insertionSort(alvo->dado, 4);
         insertionSort(alvo->filho[j]->dado, 4);
+        alvo->countD--;
     }else if (alvo->filho[j]->countD == 2 && alvo->filho[j + 1]->countD > 2){
         alvo->dado[j] = alvo->filho[j+1]->dado[0];
         alvo->filho[j + 1]->dado[0] = -1;
         insertionSort(alvo->dado, 4);
         insertionSort(alvo->filho[j+1]->dado, 4);
+        alvo->countD--;
     }else if (alvo->filho[j]->countD == 2 && alvo->filho[j + 1]->countD == 2 && irmaoEsq->countD > 2){
         combinacao(irmaoEsq, alvo->pai, alvo, dado);
         emprestimoIndice(alvo->pai, irmaoEsq, alvo, dado);
+        alvo->countD--;
     }else if (alvo->filho[j]->countD == 2 && alvo->filho[j + 1]->countD == 2 && irmaoEsq->countD == 2){
         combinacao(irmaoEsq, alvo->pai, alvo, dado);
         combinacao(irmaoPai, alvo->pai->pai, alvo, dado);
+        alvo->countD--;
     }
 }
 
