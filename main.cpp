@@ -32,7 +32,6 @@ void emprestimoEsq(lista *irmao, lista *pai, lista *alvo, int dado);
 void emprestimoDir(lista *irmao, lista *pai, lista *alvo, int dado);
 void combinacao(lista *irmao, lista *pai, lista *alvo, int dado);
 void emprestimoIndice(lista *pai, lista*irmao, lista*alvo, int dado);
-void duplaCombinacao(lista *pai, lista *irmao, lista *alvo, int dado);
 
 int main() {
     lista  *raiz= nullptr;
@@ -90,11 +89,6 @@ void remocaoIndice(lista *raiz, int dado){
         combinacao(irmaoPai, alvo->pai->pai, alvo, dado);
     }
 }
-
-void duplaCombinacao(lista *pai, lista *irmao, lista *alvo, int dado){
-
-}
-
 
 void emprestimoIndice(lista *pai, lista *irmao, lista *alvo, int dado){
     int i = 0;
