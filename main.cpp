@@ -22,7 +22,7 @@ typedef struct lista{
 }lista;
 
 void split(lista *raiz, lista *no, int dado_inserido);
-void splitRaiz(lista **no, int dado_inserido);
+void splitRaiz(lista **no, int dado_inserido, lista **auxiliar);
 void insertionSort(int v[], int length);
 void insercao(lista **raiz, int di);
 lista *busca(lista *raiz, int db, int insercao);
@@ -207,84 +207,104 @@ void insertionSort(int v[], int length){
     }
 }
 
-void split(lista *raiz, lista *no, int dado_inserido){
-    int aux[5],i,k, aux1=0,aux2, qtdFilho, aux3=0, w, filho;
-    bool operador= false;
-    lista *p, *Pai= nullptr;
-    for(i=0;i<5;i++){//vetor auxiliar para ordenar o dado a fim de fazer o split
-        if(i!=4)
-            aux[i]=no->dado[i];
+void split(lista **raiz, lista *no, int dado_inserido) {
+    int aux[5], i, k, aux1 = 0, aux2, qtdFilho, aux3 = 0, w, filho;
+    bool operador = false;
+    lista *p, *Pai = nullptr, *auxliarSplit[6];
+    for (i = 0; i < 5; i++) {//vetor auxiliar para ordenar o dado a fim de fazer o split
+        if (i != 4)
+            aux[i] = no->dado[i];
         else
-            aux[i]=dado_inserido;
+            aux[i] = dado_inserido;
     }
     insertionSort(aux, 5);
-    p = (lista *) malloc(sizeof(lista));// criação do nó resultado do split
     p = new lista();
-    p->pai=no->pai;
-    Pai=no->pai;
-    qtdFilho=(Pai->countD)+1;
-    w=0;
-    while(aux3!=1){
-        if(Pai->filho[w]==no){
-            filho=w;
-            aux3=1;
-        }
-        else
+    p->pai = no->pai;
+    Pai = no->pai;
+    qtdFilho = (Pai->countD) + 1;
+    w = 0;
+    while (aux3 != 1) {
+        if (Pai->filho[w] == no) {
+            filho = w;
+            aux3 = 1;
+        } else
             w++;
     }
-    if((qtdFilho-1)==filho)
-        Pai->filho[filho+1]=p;
-    else{
-        aux2=4;//posicao final do vetor
-        Pai->filho[aux2]=p;
-        while(aux2!=filho+1) {//abrir espaco no vetor para alocar o filho
-            if(Pai->filho[aux2-1]!= nullptr){
-                swap(Pai->filho[aux2 - 1], Pai->filho[aux2]);
-            }
-            else{
-                Pai->filho[aux2 - 1]=Pai->filho[aux2];
-                Pai->filho[aux2]= nullptr;
-            }
-            aux2--;
-        }
-    }
-    for(k=0; k<5; k++){
-        if((Pai->dado[k]<0)&&(operador==false)){
-            Pai->dado[k]=aux[2];
-            insertionSort(Pai->dado, k+1);
-            operador=true;
-        }
-        if(k<2){
-            no->dado[k]=aux[k];
-        }
-        if(k>1)
-            no->dado[k]=-1;
-        if(k>2){
-            p->dado[aux1] = aux[k];
-            aux1++;
-        }
-        if((k==4)&&(operador==false)){
-         if(Pai->pai!=raiz){
-          split(raiz,Pai, dado_inserido);
-            }
-            else{
-               splitRaiz(&Pai->pai, dado_inserido);
+    if (qtdFilho < 5) {
+        if ((qtdFilho - 1) == filho)
+            Pai->filho[filho + 1] = p;
+        else {
+            aux2 = 4;//posicao final do vetor
+            Pai->filho[aux2] = p;
+            while (aux2 != filho + 1) {//abrir espaco no vetor para alocar o filho
+                if (Pai->filho[aux2 - 1] != nullptr) {
+                    swap(Pai->filho[aux2 - 1], Pai->filho[aux2]);
+                } else {
+                    Pai->filho[aux2 - 1] = Pai->filho[aux2];
+                    Pai->filho[aux2] = nullptr;
+                }
+                aux2--;
             }
         }
     }
-    if(no->folha==true){
-        p->folha=true;
+
+    else {
+        for (int a = 0; a < 5; a++) {
+            auxliarSplit[a] = Pai->filho[a];
+        }
+        if ((qtdFilho - 1) == filho) {
+            auxliarSplit[filho + 1] = p;
+        } else {
+            aux2 = 5;//posicao final do vetor
+            auxliarSplit[aux2] = p;
+            while (aux2 != filho + 1) {//abrir espaco no vetor para alocar o filho
+                if (auxliarSplit[aux2 - 1] != nullptr) {
+                    swap(auxliarSplit[aux2 - 1], auxliarSplit[aux2]);
+                } else {
+                    auxliarSplit[aux2 - 1] = auxliarSplit[aux2];
+                    auxliarSplit[aux2] = nullptr;
+                }
+                aux2--;
+            }
+        }
     }
-    else
-        p->folha=false;
-    no->countD=2;
-    Pai->countD++;
-    Pai->folha=false;
-    p->countD=2;
+        for (k = 0; k < 5; k++) {
+            if ((Pai->dado[k] < 0) && (operador == false)) {
+                Pai->dado[k] = aux[2];
+                insertionSort(Pai->dado, k + 1);
+                operador = true;
+            }
+            if (k < 2) {
+                no->dado[k] = aux[k];
+            }
+            if (k > 1)
+                no->dado[k] = -1;
+            if (k > 2) {
+                p->dado[aux1] = aux[k];
+                aux1++;
+            }
+        }
+        if (no->folha == true) {
+            p->folha = true;
+        } else
+            p->folha = false;
+        no->countD = 2;
+        Pai->countD++;
+        Pai->folha = false;
+        p->countD = 2;
+        if(qtdFilho==5) {
+            if (Pai!= *raiz) {
+                split(&(*raiz), Pai, aux[2]);
+            } else {
+                splitRaiz(&Pai, aux[2], auxliarSplit);
+                *raiz=Pai;
+            }
+        }
+
 }
 
-void splitRaiz(lista **no, int dado_inserido) {
-    int aux[5], i, k, aux1 = 0;
+void splitRaiz(lista **no, int dado_inserido, lista **auxiliar) {
+    int aux[5], i, k, aux1 = 0, auxFor;
     lista *p, *q;
     for (i = 0; i < 5; i++) {//vetor auxiliar para ordenar o dado a fim de fazer o split
         if (i != 4)
@@ -293,10 +313,9 @@ void splitRaiz(lista **no, int dado_inserido) {
             aux[i] = dado_inserido;
     }
     insertionSort(aux, 5);
-    p = (lista *) malloc(sizeof(lista));// criação do nó resultado do split
-    q = (lista *) malloc(sizeof(lista));// criação do nó resultado do split
     q = new lista();
     p = new lista();
+    (*no)->countD=2;
     q->countD=2;
     p->countD=1;
     p->dado[0] = aux[2];
@@ -304,26 +323,40 @@ void splitRaiz(lista **no, int dado_inserido) {
     p->filho[1] = q;
     p->folha= false;
     for (k = 0; k < 5; k++) {
-        if (k > 1)
+        if(k<2){
+            (*no)->dado[k]=aux[k];
+        }
+        if (k > 1) {
             (*no)->dado[k] = -1;
+        }
         if (k > 2) {
             q->dado[aux1] = aux[k];
             aux1++;
         }
     }
-    if((*no)->filho[0] != nullptr) {
-        for (int auxiliar = 0; auxiliar < 3; auxiliar++) {
-            q->filho[auxiliar] = (*no)->filho[auxiliar + 3];
+    auxFor=0;
+    if((*auxiliar)!= nullptr){
+        for(int w=0; w<6;w++){
+            if(w<3){
+                (*no)->filho[w]=auxiliar[w];
+            }
+            else{
+                (*no)->filho[w]= nullptr;
+                q->filho[auxFor]=auxiliar[w];
+                auxFor++;
+                q->filho[w]= nullptr;
+            }
         }
     }
     (*no)->pai=p;
     q->pai=p;
     (*no)=p;
     (*no)->filho[0]->countD=2;
+    p->countD=1;
 }
 
 void insercao(lista **raiz, int di){
-    lista *p;
+    lista *p, *auxiliar=NULL;
     int k=1;
     bool operador=false;
     if(*raiz== nullptr){
@@ -354,10 +387,10 @@ void insercao(lista **raiz, int di){
             p->countD++;
         }
         else if(p!=(*raiz)){
-            split(*raiz, p, di);
+            split(&(*raiz), p, di);
         }
         else if(p==(*raiz)){
-            splitRaiz(&(*raiz), di);
+            splitRaiz(&(*raiz), di, &auxiliar);
         }
     }
 }
