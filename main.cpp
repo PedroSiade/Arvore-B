@@ -6,13 +6,16 @@ typedef struct lista{
     bool folha;
     int dado[4]{};
     int countD;
-    struct lista *filho[5]{};
+    struct lista *filho[5], *pai{};
 
     lista(){
-        folha=true;
-        countD=0;
+        this->folha=true;
+        this->countD=0;
         for(int k=0;k<5;k++){
-            this->dado[k]=-1;
+            if(k!=4) {
+                this->dado[k] = -1;
+            }
+            this->filho[k]= nullptr;
         }
     }
 
