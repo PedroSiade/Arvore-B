@@ -105,6 +105,7 @@ void emprestimoIndice(lista *pai, lista *irmao, lista *alvo, int dado){
     insertionSort(pai->dado, 4);
     insertionSort(irmao->dado, 4);
     insertionSort(alvo->dado, 4);
+    irmao->countD--;
 }
 
 void remocaoFolha(lista *raiz, int dado)
@@ -126,6 +127,18 @@ void remocaoFolha(lista *raiz, int dado)
     if(noAlvo->countD > 2){
         noAlvo->dado[j] = -1;
         insertionSort(noAlvo->dado, 4);
+        j = 0;
+        int aux1 = 0, aux2 = 0;
+        do{
+            if(noAlvo->dado[j] == -1 && noAlvo->dado[j+1] != -1){
+                aux1 = noAlvo->dado[j];
+                aux2 = noAlvo->dado[j+1];
+                swap(aux1, aux2);
+            }
+            j++;
+        }while(aux2 != aux1 && j <= 3);
+        noAlvo->countD--;
+
     }else if(noAlvo->countD == 2){
         if(noPai->filho[i-1]->countD > 2 && noPai->filho[i+1]->countD == 2){
             emprestimoEsq(noPai->filho[i-1], noPai, noAlvo, dado);
