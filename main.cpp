@@ -34,7 +34,7 @@ void combinacao(lista *irmao, lista *pai, lista *alvo, int dado);
 void emprestimoIndice(lista *pai, lista*irmao, lista*alvo, int dado);
 
 int main() {
-    lista  *raiz= nullptr;
+    lista *raiz = nullptr;
     insercao(&raiz, 20);
     insercao(&raiz, 40);
     insercao(&raiz, 60);
@@ -51,7 +51,9 @@ int main() {
     insercao(&raiz, 50);
     insercao(&raiz, 22);
     insercao(&raiz, 27);
-
+    remocaoFolha(raiz, 30);
+    // remocaoFolha(raiz, 27);
+    remocaoFolha(raiz, 25);
 
     return 0;
 }
@@ -129,14 +131,18 @@ void remocaoFolha(lista *raiz, int dado)
         insertionSort(noAlvo->dado, 4);
         j = 0;
         int aux1 = 0, aux2 = 0;
-        do{
-            if(noAlvo->dado[j] == -1 && noAlvo->dado[j+1] != -1){
+        do
+        {
+            if (noAlvo->dado[j] == -1)
+            {
                 aux1 = noAlvo->dado[j];
-                aux2 = noAlvo->dado[j+1];
-                swap(aux1, aux2);
+                aux2 = noAlvo->dado[j + 1];
+                noAlvo->dado[j] = aux2;
+                noAlvo->dado[j + 1] = aux1;
+                // swap(aux1, aux2);
             }
             j++;
-        }while(aux2 != aux1 && j <= 3);
+        } while (j < 3);
         noAlvo->countD--;
 
     }else if(noAlvo->countD == 2){
@@ -149,14 +155,16 @@ void remocaoFolha(lista *raiz, int dado)
             int aux1 = 0, aux2 = 0;
             do
             {
-                if (noAlvo->dado[j] == -1 && noAlvo->dado[j + 1] != -1)
+                if (noAlvo->dado[j] == -1)
                 {
                     aux1 = noAlvo->dado[j];
                     aux2 = noAlvo->dado[j + 1];
-                    swap(aux1, aux2);
+                    noAlvo->dado[j] = aux2;
+                    noAlvo->dado[j + 1] = aux1;
+                    // swap(aux1, aux2);
                 }
                 j++;
-            } while (aux2 != aux1 && j <= 3);
+            } while (j < 3);
         }else if (noPai->filho[i - 1]->countD == 2 && noPai->filho[i + 1]->countD > 2){
             noAlvo->dado[j] = -1;
             emprestimoDir(noPai->filho[i+1], noPai, noAlvo, dado);
@@ -166,14 +174,16 @@ void remocaoFolha(lista *raiz, int dado)
             int aux1 = 0, aux2 = 0;
             do
             {
-                if (noAlvo->dado[j] == -1 && noAlvo->dado[j + 1] != -1)
+                if (noAlvo->dado[j] == -1)
                 {
                     aux1 = noAlvo->dado[j];
                     aux2 = noAlvo->dado[j + 1];
-                    swap(aux1, aux2);
+                    noAlvo->dado[j] = aux2;
+                    noAlvo->dado[j + 1] = aux1;
+                    // swap(aux1, aux2);
                 }
                 j++;
-            } while (aux2 != aux1 && j <= 3);
+            } while (j < 3);
         }else if (noPai->filho[i - 1]->countD > 2 && noPai->filho[i + 1]->countD > 2){
             noAlvo->dado[j] = -1;
             emprestimoEsq(noPai->filho[i - 1], noPai, noAlvo, dado);
@@ -183,14 +193,16 @@ void remocaoFolha(lista *raiz, int dado)
             int aux1 = 0, aux2 = 0;
             do
             {
-                if (noAlvo->dado[j] == -1 && noAlvo->dado[j + 1] != -1)
+                if (noAlvo->dado[j] == -1)
                 {
                     aux1 = noAlvo->dado[j];
                     aux2 = noAlvo->dado[j + 1];
-                    swap(aux1, aux2);
+                    noAlvo->dado[j] = aux2;
+                    noAlvo->dado[j + 1] = aux1;
+                    // swap(aux1, aux2);
                 }
                 j++;
-            } while (aux2 != aux1 && j <= 3);
+            } while (j < 3);
         }else if (noPai->filho[i - 1]->countD == 2 && noPai->filho[i + 1]->countD == 2){
             noAlvo->dado[j] = -1;
             combinacao(noPai->filho[i - 1], noPai, noAlvo, dado);
@@ -199,14 +211,16 @@ void remocaoFolha(lista *raiz, int dado)
             int aux1 = 0, aux2 = 0;
             do
             {
-                if (noAlvo->dado[j] == -1 && noAlvo->dado[j + 1] != -1)
+                if (noAlvo->dado[j] == -1)
                 {
                     aux1 = noAlvo->dado[j];
                     aux2 = noAlvo->dado[j + 1];
-                    swap(aux1, aux2);
+                    noAlvo->dado[j] = aux2;
+                    noAlvo->dado[j + 1] = aux1;
+                    // swap(aux1, aux2);
                 }
                 j++;
-            } while (aux2 != aux1 && j <= 3);
+            } while (j < 3);
         }
     }
 }
